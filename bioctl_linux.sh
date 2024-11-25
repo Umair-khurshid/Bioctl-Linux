@@ -28,6 +28,25 @@ handle_error() {
     local message="$1"
     log_message "ERROR" "$message"
     echo "Error: $message"
+    echo "Correct Usage:"
+    echo -e "You need to specify an operation (e.g., create, add, remove, status, etc.) followed by the necessary options. For example:\n"
+    
+    echo -e "\033[1;32mTo create a RAID array:\033[0m"
+    echo -e "  \033[1m\033[1;36msudo ./bioctl_linux.sh create /dev/md0 1 2 /dev/sda /dev/sdb\033[0m"
+    echo -e "  \033[3mThis command will create a RAID array named /dev/md0 with RAID level 1, using two disks /dev/sda and /dev/sdb.\033[0m\n"
+
+    echo -e "\033[1;32mTo add a disk to an existing RAID array:\033[0m"
+    echo -e "  \033[1m\033[1;36msudo ./bioctl_linux.sh add /dev/md0 /dev/sdc\033[0m"
+    echo -e "  \033[3mThis will add /dev/sdc to the RAID array /dev/md0.\033[0m\n"
+
+    echo -e "\033[1;32mTo check the status of a RAID array:\033[0m"
+    echo -e "  \033[1m\033[1;36msudo ./bioctl_linux.sh status /dev/md0\033[0m\n"
+
+    echo -e "\033[1;32mTo encrypt a disk:\033[0m"
+    echo -e "  \033[1m\033[1;36msudo ./bioctl_linux.sh encrypt /dev/sda\033[0m\n"
+
+    echo -e "\033[1;32mTo decrypt an encrypted disk:\033[0m"
+    echo -e "  \033[1m\033[1;36msudo ./bioctl_linux.sh decrypt /dev/sda\033[0m\n"
     exit 1
 }
 
@@ -80,7 +99,10 @@ create_raid() {
         fi
     done
 
-    mdadm --create "$raid_device" --level="$raid_level" --raid-devices="$raid_disks" $devices
+    mdadm --create "$raid_device" \
+        --level="$raid_level" \
+        --raid-devices="$raid_disks" \
+        $devices
     if [ $? -eq 0 ]; then
         log_message "INFO" "RAID array $raid_device created successfully."
     else
@@ -95,7 +117,6 @@ add_disk() {
     fi
     local raid_device="$1"
     local new_disk="$2"
-    
     if [ ! -b "$new_disk" ]; then
         handle_error "Disk $new_disk does not exist!"
     fi
@@ -254,5 +275,3 @@ case "$1" in
         usage
         ;;
 esac
-
-
