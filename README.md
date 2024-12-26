@@ -21,8 +21,7 @@ Before using `bioctl_linux`, ensure the following packages are installed on your
 Install these using:
 
 `
-sudo apt update
-sudo apt install mdadm cryptsetup lvm2
+sudo apt update && sudo apt install mdadm cryptsetup lvm2
 `
 
 ## Installation
