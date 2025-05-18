@@ -1,5 +1,5 @@
 # Bioctl linux 
-`bioctl_linux` is a command-line tool inspired by OpenBSD's `bioctl` utility, designed to manage RAID configurations and disk encryption on Linux systems. It provides functionality for monitoring RAID arrays, managing encrypted volumes, and adding RAID encryption key management.
+`bioctl_linux` is a command-line tool inspired by OpenBSD's `bioctl` utility, designed to manage RAID configurations and disk encryption on Linux systems. It provides functionality for monitoring RAID arrays, managing encrypted volumes, and adding RAID encryption key management. It supports both a Bash-based implementation `bioctl_linux.sh` and a newer C-based implementation `bioctl binary`.  
 
 ## Features
 
@@ -9,7 +9,7 @@
 -   **Logging**: Tracks changes and errors in RAID and encryption setups with logging capabilities.
 
 
-## Prerequisites
+## Common dependencies (both versions)
 
 Before using `bioctl_linux`, ensure the following packages are installed on your system:
 
@@ -19,25 +19,35 @@ Before using `bioctl_linux`, ensure the following packages are installed on your
 -   `bash` (for running the script)
 
 Install these using:
-
+On Debain based distros
 `
 sudo apt update && sudo apt install mdadm cryptsetup lvm2
 `
-
+On RHEL based:
+`
+sudo dnf upgrade && sudo dnf install mdadm cryptsetup lvm2
+`
 ## Installation
 
-1.  **Clone the repository**:
+**Clone the repository**:
     
-   ```
+```
    git clone https://github.com/Umair-khurshid/bioctl-linux.git
    cd bioctl-linux
 ```
     
-2.  **Make the script executable**:
-    
-   `chmod +x bioctl_linux.sh
-   `
-    
+**Bash Version (Quick Start)**
+```
+chmod +x bioctl_linux.sh
+sudo ./bioctl_linux.sh status /dev/md0
+```
+**C Version (Recommended)**
+Compile the C version:
+```
+gcc -o bioctl bioctl.c
+sudo ./bioctl status /dev/md0
+
+```    
 
 ## **Usage**
 
@@ -47,10 +57,12 @@ sudo apt update && sudo apt install mdadm cryptsetup lvm2
     
  
   `sudo ./bioctl_linux.sh --check-raid` 
+  `sudo ./bioctl status /dev/md0`
     
 -   **Encrypt a new disk**:
 
    `sudo ./bioctl_linux.sh --encrypt-disk /dev/sdX` 
+   `sudo ./bioctl encrypt /dev/sdX`
     
 -   **Add a new encryption key**:
     
