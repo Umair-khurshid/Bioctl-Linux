@@ -3,3 +3,5 @@
 *.swo
 *.sw?
 
+# Ignore compiled binaries
+bioctl
